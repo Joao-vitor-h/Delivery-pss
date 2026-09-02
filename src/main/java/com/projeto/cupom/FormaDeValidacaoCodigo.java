@@ -1,6 +1,6 @@
 package com.projeto.cupom;
 
-import com.projeto.RelacaoCuponsDescontoPedido;
+import com.projeto.CupomDescontoPedidoRepository;
 import com.projeto.model.CupomDescontoPedido;
 
 import java.util.Optional;
@@ -20,7 +20,7 @@ public class FormaDeValidacaoCodigo implements IFormaDeValidacao {
 
     @Override
     public boolean seAplica() {
-        RelacaoCuponsDescontoPedido cupons = new RelacaoCuponsDescontoPedido();
+        CupomDescontoPedidoRepository cupons = new CupomDescontoPedidoRepository();
 
         Optional<CupomDescontoPedido> optCupom = cupons.buscarCupom(codigo);
 

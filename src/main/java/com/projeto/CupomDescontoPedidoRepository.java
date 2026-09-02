@@ -9,11 +9,11 @@ import java.util.Optional;
 
 // Essa classe é responsável por guardar a lógica de manipulação dos cupons de desconto no Pedido.
 
-public class RelacaoCuponsDescontoPedido {
+public class CupomDescontoPedidoRepository {
 
     private List<CupomDescontoPedido> cupons;
 
-    public RelacaoCuponsDescontoPedido() {
+    public CupomDescontoPedidoRepository() {
         cupons = new ArrayList<>();
         // Aqui eu vou adicionar os cupons que já existem;
         cupons.add(new CupomDescontoPedido("DESC10",

@@ -1,6 +1,6 @@
 package com.projeto.cupom;
 
-import com.projeto.RelacaoCuponsDescontoPedido;
+import com.projeto.CupomDescontoPedidoRepository;
 import com.projeto.model.CupomDescontoPedido;
 import com.projeto.model.Pedido;
 
@@ -32,7 +32,7 @@ public class FormaDeValidacaoPedidoCupomAplicado implements IFormaDeValidacao {
         }
         else {
             Map<String, Double> cupomAplicado = pedido.getCupomAplicado();
-            RelacaoCuponsDescontoPedido cupons = new RelacaoCuponsDescontoPedido();
+            CupomDescontoPedidoRepository cupons = new CupomDescontoPedidoRepository();
             CupomDescontoPedido novoCupom = cupons.buscarCupom(codigo).get();
 
             return novoCupom.getPercentual() > cupomAplicado.get(codigo);
