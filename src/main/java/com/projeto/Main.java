@@ -1,9 +1,8 @@
 package com.projeto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import com.projeto.formasdesconto.CalculadoraDeDescontoService;
+import com.projeto.formasdesconto.CalculadoraTaxaDescontoService;
 import com.projeto.model.Cliente;
 import com.projeto.model.CupomDescontoEntrega;
 import com.projeto.model.Item;
@@ -15,32 +14,74 @@ import com.projeto.model.Pedido;
 
 public class Main {
     public static void main( String[] args ) {
+        
+        try {
+            // Itens
+            Item pizza = new Item("Pizza", 1, 150.0, "Alimentação");
+            Item bolo = new Item("Bolo", 1, 50.0, "Alimentação");
+            Item cocaCola = new Item("Coca-Cola", 1, 15.0, "Bebida");
+            Item caderno = new Item("Caderno", 1, 35, "teste");
+            Item cubo = new Item("Cubo Mágico", 1, 20.0, "lazer");
 
-        // Cenário de teste: altere as informações do cliente (bairro, tipo) para ver as mudanças de desconto. Altere o valor e o tipo dos itens para verificar as mudanças de desconto.
+            // Cliente
+            Cliente cliente1 = new Cliente("João Vitor", "bronze", 0, "teste", "cidade maravilhosa", "teste");
+            Cliente cliente2 = new Cliente("Carlos Henrique", "ouro", 0, "teste", "centro", "teste");
 
-        CalculadoraDeDescontoService calculadora = new CalculadoraDeDescontoService();
+            // Pedidos
+            Pedido pedido1 = new Pedido(LocalDateTime.of(2026, 8, 20, 17, 15, 52), cliente1);
+            Pedido pedido2 = new Pedido(LocalDateTime.of(2026, 8, 20, 17, 27, 31), cliente2);
 
-        Cliente cliente = new Cliente("João Vitor", "prata", 0, "Teste", "cidade maravilhosa", "Teste");
+            // Itens do pedido 1.
+            pedido1.adicionarItem(pizza);
+            pedido1.adicionarItem(caderno);
+            pedido1.adicionarItem(cubo);
 
-        Pedido pedido = new Pedido(LocalDateTime.of(2026, 8, 18, 16, 33, 45), cliente);
+            // Itens do pedido 2.
+            pedido2.adicionarItem(bolo);
+            pedido2.adicionarItem(caderno);
+            pedido2.adicionarItem(pizza);
+            pedido2.adicionarItem(cocaCola);
 
-        Item pizza = new Item("Pizza", 2, 250.0, "AliMenTAçÃo");
+            CalculadoraTaxaDescontoService calculadora = new CalculadoraTaxaDescontoService();
 
-        Item cocaCola = new Item("Coca-Cola", 1, 10.0, "alimentação");
+            // Referente ao pedido 1.
+            calculadora.calcularDesconto(pedido1);
 
-        pedido.adicionarItem(pizza);
-        pedido.adicionarItem(cocaCola);
+            System.out.println("=====================================================");
+            System.out.println(pedido1);
+            System.out.println("-ITENS:\n");
 
-        List<CupomDescontoEntrega> descontos = calculadora.calcularDesconto(pedido);
+            for (Item item : pedido1.getItens()) {
+                System.out.println(item);
+            }
 
-        for (CupomDescontoEntrega cupom : descontos) {
-            pedido.aplicarDesconto(cupom);
-        }
+            System.out.println("-DESCONTOS APLICADOS:\n");
+            for (CupomDescontoEntrega cupom : pedido1.getCuponsDescontoEntrega()) {
+                System.out.println(cupom);
+            }
 
-        System.out.println(pedido);
+            System.out.println("=====================================================");
 
-        for (CupomDescontoEntrega cupom : pedido.getCupomDescontoEntrega()) {
-            System.out.print(cupom);
+            // Referente ao pedido 2.
+            calculadora.calcularDesconto(pedido2);
+
+            System.out.println("=====================================================");
+            System.out.println(pedido2);
+            System.out.println("-ITENS:\n");
+
+            for (Item item : pedido2.getItens()) {
+                System.out.println(item);
+            }
+
+            System.out.println("-DESCONTOS APLICADOS:\n");
+            for (CupomDescontoEntrega cupom : pedido2.getCuponsDescontoEntrega()) {
+                System.out.println(cupom);
+            }
+
+            System.out.println("=====================================================");
+
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
         }
     }
 }

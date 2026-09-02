@@ -1,5 +1,7 @@
 package com.projeto.formasdesconto;
 
+import java.util.Optional;
+
 import com.projeto.model.CupomDescontoEntrega;
 import com.projeto.model.Pedido;
 
@@ -17,15 +19,11 @@ public class FormaDescontoValorPedido implements IFormaDescontoTaxaEntrega{
     }
 
     @Override
-    public CupomDescontoEntrega calcularDesconto(Pedido pedido) {
-
-        double desconto = 0.0;
-
-        if (seAplica(pedido)) {
-            desconto = VALOR_DESCONTO;
-        }
-
-        return new CupomDescontoEntrega("Forma de Desconto por Valor do Pedido", desconto);
+    public Optional<CupomDescontoEntrega> calcularDesconto(Pedido pedido) {
+        return Optional.of(new CupomDescontoEntrega(
+            "Forma de Desconto por Valor do Pedido - acima de R$" + limiteValorPedido, 
+            VALOR_DESCONTO)
+        );
     }
 
     @Override

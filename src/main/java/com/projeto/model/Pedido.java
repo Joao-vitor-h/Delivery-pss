@@ -3,6 +3,9 @@ package com.projeto.model;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import com.projeto.APITaxaDescontoMock;
 
 /**
  * @author João Vitor Henrique
@@ -10,7 +13,7 @@ import java.util.List;
 
 public class Pedido {
     
-    private double taxaEntrega = 10.0;
+    private double taxaEntrega;
     private Cliente cliente;
     private List<Item> itens;
     private List<CupomDescontoEntrega> cuponsDescontoEntrega;
@@ -29,6 +32,7 @@ public class Pedido {
         this.cliente = cliente;
         this.itens = new ArrayList<>();
         this.cuponsDescontoEntrega = new ArrayList<>();
+        this.taxaEntrega = APITaxaDescontoMock.getTaxaDescontoEntrega();
     }
 
     public void adicionarItem(Item item) {
@@ -51,54 +55,68 @@ public class Pedido {
 
     public double getTaxaEntrega() { return taxaEntrega; }
 
-    public void aplicarDesconto(CupomDescontoEntrega desconto) {
+    public void aplicarDesconto(Optional<CupomDescontoEntrega> optDesconto) {
 
-        if (this.getDescontoConcedido() == this.taxaEntrega) {
+        if (optDesconto.isEmpty()) {
+            throw new IllegalArgumentException("Cupom inválido.");
+        }
+
+        if (this.taxaEntrega == 0.0) {
             return;
         }
 
-        if (desconto.getValorDesconto() == 0.0) {
-            return;
-        }
+        CupomDescontoEntrega cupom = optDesconto.get();
 
-        double valor = desconto.getValorDesconto() + this.getDescontoConcedido();
+        double valor = cupom.getValorDesconto();
 
         if (valor > this.taxaEntrega)  {
 
             valor = 0.0;
-
-            while ((valor + this.getDescontoConcedido()) < taxaEntrega) {
+            // Aplicação parcial do desconto. PROBLEMA!
+            while (valor < this.taxaEntrega) {
                 valor += 0.5;
             }
 
-            CupomDescontoEntrega cupom = new CupomDescontoEntrega("Aplicação Parcial " + desconto.getNomeMetodo(), valor);
+            CupomDescontoEntrega novoCupom = new CupomDescontoEntrega("Aplicação Parcial " + cupom.getNomeMetodo(), valor);
 
-            desconto = cupom;
+            optDesconto = Optional.of(novoCupom);
         }
 
-        cuponsDescontoEntrega.add(desconto);
+        this.taxaEntrega -= optDesconto.get().getValorDesconto();
+
+        cuponsDescontoEntrega.add(optDesconto.get());
     }
 
-    public double getDescontoConcedido() {
-        double soma = 0.0;
+    // Método para calcular o desconto da taxa de entrega.
+    public double getValorDescontoTaxaEntrega() {
+        double desconto = 0.0;
 
         for (CupomDescontoEntrega cupom : cuponsDescontoEntrega) {
-            soma += cupom.getValorDesconto();
+            desconto += cupom.getValorDesconto();
         }
 
-        return soma;
+        return desconto;
     }
 
-    public List<CupomDescontoEntrega> getCupomDescontoEntrega() { return cuponsDescontoEntrega; }
+    // Método referente ao desconto no pedido.
+    public double getDescontoConcedido() {
+        return 0.0;
+    }
 
-    // arrumar esse toString
+    public List<CupomDescontoEntrega> getCuponsDescontoEntrega() { return cuponsDescontoEntrega; }
+
     @Override
     public String toString() {
 
-        return "Cliente: " + cliente.getNome() + "\n" +
-               "Data: " + data + "\n" +
-               "Itens: " + this.getItens() + "\n" +
-               "Desconto: " + this.getDescontoConcedido() + "\n" +
-               "Taxa de Entrega: " + (taxaEntrega - this.getDescontoConcedido()) + "\n";
+        return "-Cliente: " + cliente.getNome() + "\n" +
+               "-Data: " + data + "\n" +
+               "-Desconto da Taxa de Entrega: R$" + this.getValorDescontoTaxaEntrega() + "\n" +
+               "-Taxa de Entrega: R$" + taxaEntrega + "\n" +
+               "\n-VALOR TOTAL: R$" + this.calcularTotalNoPedido() + "\n";
+    }
+
+    // Método novo
+    public double calcularTotalNoPedido() {
+        return this.getValorPedido() + this.taxaEntrega;
     }
 }

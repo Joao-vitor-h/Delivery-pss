@@ -3,6 +3,7 @@ package com.projeto.formasdesconto;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.projeto.model.CupomDescontoEntrega;
 import com.projeto.model.Item;
@@ -25,23 +26,21 @@ public class FormaDescontoTipoItem implements IFormaDescontoTaxaEntrega {
     }
 
     @Override
-    public CupomDescontoEntrega calcularDesconto(Pedido pedido) {
+    public Optional<CupomDescontoEntrega> calcularDesconto(Pedido pedido) {
 
         List<Item> itensPedido = pedido.getItens();
         double soma = 0.0;
+        String categoria;
+        
+        for (Item item : itensPedido) {
+            categoria = item.getTipo().toUpperCase();
 
-        if (seAplica(pedido)) {
-            for (Item item : itensPedido) {
-                try {
-                    String tipo = item.getTipo().toUpperCase();
-                    soma += descontosPorTipoItem.get(tipo);
-                } catch (RuntimeException e) {
-                    soma += 0.0;
-                }
+            if (descontosPorTipoItem.containsKey(categoria)) {
+                soma += descontosPorTipoItem.get(categoria);
             }
         }
 
-        return new CupomDescontoEntrega("Forma de Desconto por Item", soma);
+        return Optional.of(new CupomDescontoEntrega("Forma de Desconto por Item", soma));
     }
 
     @Override
@@ -50,13 +49,12 @@ public class FormaDescontoTipoItem implements IFormaDescontoTaxaEntrega {
         boolean confirmacao = false;
 
         for (Item item : pedido.getItens()) {
-            switch (item.getTipo().toUpperCase()) {
-                case "ALIMENTAÇÃO" -> confirmacao = true;
-                case "EDUCAÇÃO" -> confirmacao = true;
-                case "LAZER" -> confirmacao = true;
-            }
+            confirmacao = descontosPorTipoItem.containsKey(
+                item.getTipo().toUpperCase()
+            );
+            
             if (confirmacao == true) {
-                break;
+                return confirmacao;
             }
         }
 

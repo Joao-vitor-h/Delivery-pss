@@ -2,6 +2,7 @@ package com.projeto.formasdesconto;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import com.projeto.model.CupomDescontoEntrega;
 import com.projeto.model.Pedido;
@@ -24,31 +25,21 @@ public class FormaDescontoTaxaPorTipoCliente implements IFormaDescontoTaxaEntreg
     }
 
     @Override
-    public CupomDescontoEntrega calcularDesconto(Pedido pedido) {
+    public Optional<CupomDescontoEntrega> calcularDesconto(Pedido pedido) {
 
         tipoCliente = pedido.getCliente().getTipo().toUpperCase();
-        double desconto = 0.0;
 
-        if (seAplica(pedido)) {
-            desconto = descontosPorTipoCliente.get(tipoCliente);
-        }
-
-        return new CupomDescontoEntrega("Forma de Desconto por Tipo de Cliente", desconto);
+        return Optional.of(new CupomDescontoEntrega(
+            "Forma de Desconto por Tipo de Cliente - " + tipoCliente, 
+            descontosPorTipoCliente.get(tipoCliente)
+        ));
     }
 
     @Override
     public boolean seAplica(Pedido pedido) {
 
         tipoCliente = pedido.getCliente().getTipo().toUpperCase();
-        boolean confirmacao;
-
-        switch (tipoCliente) {
-            case "OURO" -> confirmacao = true;
-            case "PRATA" -> confirmacao = true;
-            case "BRONZE" -> confirmacao = true;
-            default -> confirmacao = false;
-        }
-
-        return confirmacao;
+       
+        return descontosPorTipoCliente.containsKey(tipoCliente);
     }
 }

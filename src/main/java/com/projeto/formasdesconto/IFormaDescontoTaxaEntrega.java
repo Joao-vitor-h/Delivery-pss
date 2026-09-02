@@ -1,5 +1,7 @@
 package com.projeto.formasdesconto;
 
+import java.util.Optional;
+
 import com.projeto.model.CupomDescontoEntrega;
 import com.projeto.model.Pedido;
 
@@ -9,6 +11,6 @@ import com.projeto.model.Pedido;
 
 public interface IFormaDescontoTaxaEntrega {
 
-    public abstract CupomDescontoEntrega calcularDesconto(Pedido pedido);
+    public abstract Optional<CupomDescontoEntrega> calcularDesconto(Pedido pedido);
     public abstract boolean seAplica(Pedido pedido);
 }
