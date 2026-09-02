@@ -2,7 +2,9 @@ package com.projeto.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.projeto.APITaxaDescontoMock;
@@ -18,6 +20,7 @@ public class Pedido {
     private List<Item> itens;
     private List<CupomDescontoEntrega> cuponsDescontoEntrega;
     private LocalDateTime data;
+    private Map<String, Double> cupomDescontoPedido;
 
     public Pedido (LocalDateTime data, Cliente cliente) {
         
@@ -33,6 +36,7 @@ public class Pedido {
         this.itens = new ArrayList<>();
         this.cuponsDescontoEntrega = new ArrayList<>();
         this.taxaEntrega = APITaxaDescontoMock.getTaxaDescontoEntrega();
+        this.cupomDescontoPedido = new HashMap<>();
     }
 
     public void adicionarItem(Item item) {
@@ -99,7 +103,12 @@ public class Pedido {
     }
 
     // Método referente ao desconto no pedido.
-    public double getDescontoConcedido() {
+    public double getDescontoConcedido() throws NullPointerException {
+        List<Double> percentual = new ArrayList<>(cupomDescontoPedido.values());
+
+        if (percentual.isEmpty()) {
+            return percentual.get(0);
+        }
         return 0.0;
     }
 
@@ -118,5 +127,14 @@ public class Pedido {
     // Método novo
     public double calcularTotalNoPedido() {
         return this.getValorPedido() + this.taxaEntrega;
+    }
+
+    public void setCupomDescontoPedido(CupomDescontoPedido cupom) {
+        cupomDescontoPedido.put(cupom.getCodigo(), cupom.getPercentual());
+    }
+
+    // Metodo para verificar se o pedido tem um cupom de desconto ao pedido aplicado.
+    public Map<String, Double> getCupomAplicado() {
+        return cupomDescontoPedido;
     }
 }

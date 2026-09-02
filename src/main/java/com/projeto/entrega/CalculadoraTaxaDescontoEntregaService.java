@@ -1,19 +1,18 @@
-package com.projeto.formasdesconto;
+package com.projeto.entrega;
+
+import com.projeto.model.Pedido;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.projeto.model.Pedido;
 
 /**
  * @author João Vitor Henrique
  */
 
-public class CalculadoraTaxaDescontoService {
-
+public class CalculadoraTaxaDescontoEntregaService {
     private List<IFormaDescontoTaxaEntrega> formasDeDesconto;
 
-    public CalculadoraTaxaDescontoService() {
+    public CalculadoraTaxaDescontoEntregaService() {
 
         formasDeDesconto = new ArrayList<>();
         formasDeDesconto.add(new FormaDescontoTaxaPorBairro());

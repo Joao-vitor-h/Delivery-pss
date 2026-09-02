@@ -2,15 +2,14 @@ package com.projeto;
 
 import java.time.LocalDateTime;
 
-import com.projeto.formasdesconto.CalculadoraTaxaDescontoService;
-import com.projeto.model.Cliente;
-import com.projeto.model.CupomDescontoEntrega;
-import com.projeto.model.Item;
-import com.projeto.model.Pedido;
+import com.projeto.entrega.CalculadoraTaxaDescontoEntregaService;
+import com.projeto.model.*;
 
 /**
  * @author João Vitor Henrique
  */
+
+// Teste
 
 public class Main {
     public static void main( String[] args ) {
@@ -42,7 +41,14 @@ public class Main {
             pedido2.adicionarItem(pizza);
             pedido2.adicionarItem(cocaCola);
 
-            CalculadoraTaxaDescontoService calculadora = new CalculadoraTaxaDescontoService();
+            CupomDescontoPedido cupomPedido = new CupomDescontoPedido(
+                    "DESC10",
+                    0.1,
+                    LocalDateTime.of(2026, 9, 1, 00, 00),
+                    LocalDateTime.of(2026, 9, 10, 00, 00)
+            );
+
+            CalculadoraDeDescontoService calculadora = new CalculadoraDeDescontoService(cupomPedido);
 
             // Referente ao pedido 1.
             calculadora.calcularDesconto(pedido1);
