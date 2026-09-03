@@ -5,6 +5,10 @@ import com.projeto.model.CupomDescontoPedido;
 
 import java.util.Optional;
 
+/**
+ * @author João Vitor Henrique
+ */
+
 public class FormaDeValidacaoCodigo implements IFormaDeValidacao {
 
     private String codigo;

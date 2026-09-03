@@ -2,14 +2,13 @@ package com.projeto;
 
 import java.time.LocalDateTime;
 
+import com.projeto.cupom.FormasDeValidacaoCupomPedidoService;
 import com.projeto.entrega.CalculadoraTaxaDescontoEntregaService;
 import com.projeto.model.*;
 
 /**
  * @author João Vitor Henrique
  */
-
-// Teste
 
 public class Main {
     public static void main( String[] args ) {
@@ -41,6 +40,7 @@ public class Main {
             pedido2.adicionarItem(pizza);
             pedido2.adicionarItem(cocaCola);
 
+            // Cupom com data alterada para estar válido.
             CupomDescontoPedido cupomPedido = new CupomDescontoPedido(
                     "DESC10",
                     0.1,
@@ -48,7 +48,8 @@ public class Main {
                     LocalDateTime.of(2026, 9, 10, 00, 00)
             );
 
-            CalculadoraDeDescontoService calculadora = new CalculadoraDeDescontoService(cupomPedido);
+            CalculadoraDeDescontoService calculadora = new CalculadoraDeDescontoService();
+            calculadora.aplicarCupom(cupomPedido);
 
             // Referente ao pedido 1.
             calculadora.calcularDesconto(pedido1);
@@ -71,7 +72,6 @@ public class Main {
             // Referente ao pedido 2.
             calculadora.calcularDesconto(pedido2);
 
-            System.out.println("=====================================================");
             System.out.println(pedido2);
             System.out.println("-ITENS:\n");
 

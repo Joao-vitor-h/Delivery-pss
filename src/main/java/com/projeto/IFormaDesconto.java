@@ -2,7 +2,10 @@ package com.projeto;
 
 import com.projeto.model.Pedido;
 
-public interface IFormaDesconto {
+/**
+ * @author João Vitor Henrique
+ */
 
+public interface IFormaDesconto {
     public abstract void calcularDesconto(Pedido pedido);
 }

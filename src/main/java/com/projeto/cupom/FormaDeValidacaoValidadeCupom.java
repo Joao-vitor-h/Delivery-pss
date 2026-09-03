@@ -5,6 +5,10 @@ import com.projeto.model.CupomDescontoPedido;
 
 import java.time.LocalDateTime;
 
+/**
+ * @author João Vitor Henrique
+ */
+
 public class FormaDeValidacaoValidadeCupom implements IFormaDeValidacao {
 
     private String codigo;

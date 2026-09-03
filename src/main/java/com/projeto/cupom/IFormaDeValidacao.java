@@ -1,6 +1,9 @@
 package com.projeto.cupom;
 
-public interface IFormaDeValidacao {
+/**
+ * @author João Vitor Henrique
+ */
 
+public interface IFormaDeValidacao {
     public abstract boolean seAplica();
 }

@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-// Essa classe é responsável por guardar a lógica de manipulação dos cupons de desconto no Pedido.
+/**
+ * @author João Vitor Henrique
+ */
 
 public class CupomDescontoPedidoRepository {
 
@@ -15,11 +17,58 @@ public class CupomDescontoPedidoRepository {
 
     public CupomDescontoPedidoRepository() {
         cupons = new ArrayList<>();
-        // Aqui eu vou adicionar os cupons que já existem;
-        cupons.add(new CupomDescontoPedido("DESC10",
+        cupons.add(new CupomDescontoPedido(
+                "DESC10",
                 0.1,
                 LocalDateTime.of(2026, 9, 1, 00, 00),
-                LocalDateTime.of(2026, 9, 10, 00, 00)));
+                LocalDateTime.of(2026, 9, 10, 00, 00))
+        );
+        cupons.add(new CupomDescontoPedido(
+                "DESC20",
+                0.20,
+                LocalDateTime.of(2026, 10, 1, 0, 0),
+                LocalDateTime.of(2026, 10, 5, 23, 59)
+        ));
+        cupons.add(new CupomDescontoPedido(
+                "DESC30",
+                0.30,
+                LocalDateTime.of(2026, 9, 24, 0, 0),
+                LocalDateTime.of(2026, 9, 24, 23, 59)
+        ));
+        cupons.add(new CupomDescontoPedido(
+                "DIAPAI12",
+                0.12,
+                LocalDateTime.of(2026, 10, 9, 0, 0),
+                LocalDateTime.of(2026, 10, 10, 23, 59)
+        ));
+
+        cupons.add(new CupomDescontoPedido(
+                "DIAMAE12",
+                0.12,
+                LocalDateTime.of(2026, 10, 10, 0, 0),
+                LocalDateTime.of(2026, 10, 12, 23, 59)
+        ));
+
+        cupons.add(new CupomDescontoPedido(
+                "NATAL10",
+                0.10,
+                LocalDateTime.of(2026, 9, 20, 0, 0),
+                LocalDateTime.of(2026, 9, 26, 23, 59)
+        ));
+
+        cupons.add(new CupomDescontoPedido(
+                "FESTA15",
+                0.15,
+                LocalDateTime.of(2026, 9, 30, 18, 0),
+                LocalDateTime.of(2026, 10, 1, 6, 0)
+        ));
+
+        cupons.add(new CupomDescontoPedido(
+                "BLACK50",
+                0.50,
+                LocalDateTime.of(2026, 9, 28, 0, 0),
+                LocalDateTime.of(2026, 9, 28, 23, 59)
+        ));
     }
 
     public void adicionarCupom(CupomDescontoPedido cupom) {

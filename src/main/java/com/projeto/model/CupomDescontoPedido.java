@@ -2,6 +2,10 @@ package com.projeto.model;
 
 import java.time.LocalDateTime;
 
+/**
+ * @author João Vitor Henrique
+ */
+
 public class CupomDescontoPedido {
     private String codigo;
     private double percentual;

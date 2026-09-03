@@ -5,11 +5,23 @@ import com.projeto.model.Pedido;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author João Vitor Henrique
+ */
+
 public class FormasDeValidacaoCupomPedidoService {
 
     private List<IFormaDeValidacao> formasDeValidacao;
 
     public FormasDeValidacaoCupomPedidoService(String codigo, Pedido pedido) {
+        if (codigo == null) {
+            throw new RuntimeException("O código está nulo.");
+        }
+
+        if (pedido == null) {
+            throw new RuntimeException("O pedido está nulo.");
+        }
+
         formasDeValidacao = new ArrayList<>();
         formasDeValidacao.add(new FormaDeValidacaoCodigo(codigo));
         formasDeValidacao.add(new FormaDeValidacaoValidadeCupom(codigo));

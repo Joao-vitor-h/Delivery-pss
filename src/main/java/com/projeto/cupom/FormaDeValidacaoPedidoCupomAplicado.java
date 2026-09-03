@@ -4,7 +4,9 @@ import com.projeto.CupomDescontoPedidoRepository;
 import com.projeto.model.CupomDescontoPedido;
 import com.projeto.model.Pedido;
 
-import java.util.Map;
+/**
+ * @author João Vitor Henrique
+ */
 
 public class FormaDeValidacaoPedidoCupomAplicado implements IFormaDeValidacao {
 
@@ -27,15 +29,14 @@ public class FormaDeValidacaoPedidoCupomAplicado implements IFormaDeValidacao {
 
     @Override
     public boolean seAplica() {
-        if (pedido.getCupomAplicado().isEmpty()) {
+        if (pedido.existeCupomAplicado()) {
             return true;
         }
         else {
-            Map<String, Double> cupomAplicado = pedido.getCupomAplicado();
             CupomDescontoPedidoRepository cupons = new CupomDescontoPedidoRepository();
             CupomDescontoPedido novoCupom = cupons.buscarCupom(codigo).get();
 
-            return novoCupom.getPercentual() > cupomAplicado.get(codigo);
+            return novoCupom.getPercentual() > pedido.getPercentualCupom();
         }
     }
 }

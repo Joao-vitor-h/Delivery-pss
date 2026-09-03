@@ -6,19 +6,27 @@ import com.projeto.model.Pedido;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author João Vitor Henrique
+ */
+
 public class CalculadoraDeDescontoService {
 
     private List<IFormaDesconto> formasDeDesconto;
 
-    public CalculadoraDeDescontoService(CupomDescontoPedido cupom) {
-
-        if (cupom == null) {
-            throw new RuntimeException("O cupom está nulo.");
-        }
-
+    public CalculadoraDeDescontoService() {
         formasDeDesconto = new ArrayList<>();
         formasDeDesconto.add(new FormaDeDescontoEntrega());
-        formasDeDesconto.add(new FormaDeDescontoPedido(cupom));
+        formasDeDesconto.add(new FormaDeDescontoPedido());
+    }
+
+    public void aplicarCupom(CupomDescontoPedido cupom) {
+        if (cupom == null) {
+            throw new RuntimeException("O cupom está nulo");
+        }
+
+        FormaDeDescontoPedido desconto = (FormaDeDescontoPedido) formasDeDesconto.get(1);
+        desconto.aplicarCupom(cupom);
     }
 
     public void calcularDesconto(Pedido pedido) {

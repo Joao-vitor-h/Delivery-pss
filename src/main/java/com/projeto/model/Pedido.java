@@ -2,9 +2,7 @@ package com.projeto.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import com.projeto.APITaxaDescontoMock;
@@ -20,7 +18,8 @@ public class Pedido {
     private List<Item> itens;
     private List<CupomDescontoEntrega> cuponsDescontoEntrega;
     private LocalDateTime data;
-    private Map<String, Double> cupomDescontoPedido;
+    private String codigoCupom;
+    private double percentualCupom;
 
     public Pedido (LocalDateTime data, Cliente cliente) {
         
@@ -36,7 +35,8 @@ public class Pedido {
         this.itens = new ArrayList<>();
         this.cuponsDescontoEntrega = new ArrayList<>();
         this.taxaEntrega = APITaxaDescontoMock.getTaxaDescontoEntrega();
-        this.cupomDescontoPedido = new HashMap<>();
+        this.codigoCupom = "";
+        this.percentualCupom = 0.0;
     }
 
     public void adicionarItem(Item item) {
@@ -91,7 +91,6 @@ public class Pedido {
         cuponsDescontoEntrega.add(optDesconto.get());
     }
 
-    // Método para calcular o desconto da taxa de entrega.
     public double getValorDescontoTaxaEntrega() {
         double desconto = 0.0;
 
@@ -102,15 +101,7 @@ public class Pedido {
         return desconto;
     }
 
-    // Método referente ao desconto no pedido.
-    public double getDescontoConcedido() throws NullPointerException {
-        List<Double> percentual = new ArrayList<>(cupomDescontoPedido.values());
-
-        if (percentual.isEmpty()) {
-            return percentual.get(0);
-        }
-        return 0.0;
-    }
+    public double getDescontoConcedido() throws NullPointerException { return percentualCupom; }
 
     public List<CupomDescontoEntrega> getCuponsDescontoEntrega() { return cuponsDescontoEntrega; }
 
@@ -118,23 +109,28 @@ public class Pedido {
     public String toString() {
 
         return "-Cliente: " + cliente.getNome() + "\n" +
-               "-Data: " + data + "\n" +
-               "-Desconto da Taxa de Entrega: R$" + this.getValorDescontoTaxaEntrega() + "\n" +
+               "-Data: " + data.getDayOfMonth() + "/" + data.getMonthValue()+ "/" + data.getYear() + " " + data.getHour() + ":" + data.getMinute() + "\n" +
+               "-Desconto da Taxa de Entrega: R$" + getValorDescontoTaxaEntrega() + "\n" +
+               "-Código do cupom: " + (getCodigoCupom().isBlank() ? "Sem cupom aplicado" : getCodigoCupom()) + "\n" +
+               "-Taxa de Desconto no Pedido: " + getPercentualCupom() * 100 + "%\n" +
                "-Taxa de Entrega: R$" + taxaEntrega + "\n" +
-               "\n-VALOR TOTAL: R$" + this.calcularTotalNoPedido() + "\n";
+               "\n-VALOR TOTAL: R$" + (calcularTotalNoPedido() - (calcularTotalNoPedido() * getPercentualCupom())) + "\n";
     }
 
-    // Método novo
     public double calcularTotalNoPedido() {
         return this.getValorPedido() + this.taxaEntrega;
     }
 
     public void setCupomDescontoPedido(CupomDescontoPedido cupom) {
-        cupomDescontoPedido.put(cupom.getCodigo(), cupom.getPercentual());
+        codigoCupom = cupom.getCodigo();
+        percentualCupom = cupom.getPercentual();
     }
 
-    // Metodo para verificar se o pedido tem um cupom de desconto ao pedido aplicado.
-    public Map<String, Double> getCupomAplicado() {
-        return cupomDescontoPedido;
+    public boolean existeCupomAplicado() {
+        return codigoCupom.isBlank();
     }
+
+    public String getCodigoCupom() { return codigoCupom; }
+
+    public double getPercentualCupom() { return  percentualCupom; }
 }
